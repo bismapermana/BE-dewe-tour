@@ -3,8 +3,6 @@ const { user } = require("../../models/");
 exports.getUsers = async (req, res) => {
   try {
     const data = await user.findAll();
-    console.log(data);
-
     res.send({
       status: "success",
       data,
