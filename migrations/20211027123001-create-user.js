@@ -16,8 +16,8 @@ module.exports = {
         unique: true,
       },
       password: {
-        allowNull: false,
         type: Sequelize.STRING,
+        allowNull: false,
       },
       phone: {
         type: Sequelize.STRING,

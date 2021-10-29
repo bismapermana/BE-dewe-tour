@@ -9,7 +9,7 @@ exports.getUsers = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.send({
+    res.status(500).send({
       status: "failed",
       message: "server error",
     });
@@ -19,17 +19,17 @@ exports.getUsers = async (req, res) => {
 exports.deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const deleteUser = await user.destroy({
+    await user.destroy({
       where: { id },
     });
 
     res.send({
       status: "success",
-      message: `delete user id  ${deleteUser} success `,
+      message: `delete user id  ${id} success `,
     });
   } catch (error) {
     console.log(error);
-    res.send({
+    res.status(500).send({
       status: "failed",
       message: "server error",
     });

@@ -7,7 +7,15 @@ const {
   addCountry,
   updateCountry,
 } = require("../controllers/country");
+const {
+  getTrips,
+  getTrip,
+  addTrip,
+  updateTrip,
+  deleteTrip,
+} = require("../controllers/trip");
 const { getUsers, deleteUser } = require("../controllers/user");
+const { uploadFile } = require("../middlewares/uploadFIle");
 
 router.get("/users", getUsers);
 router.delete("/users/:id", deleteUser);
@@ -16,5 +24,11 @@ router.get("/countries", getCountries);
 router.get("/countries/:id", getCountry);
 router.post("/countries", addCountry);
 router.patch("/countries/:id", updateCountry);
+
+router.get("/trips", getTrips);
+router.get("/trips/:id", getTrip);
+router.post("/trips", uploadFile("imageFile"), addTrip);
+router.patch("/trips/:id", uploadFile("imageFile"), updateTrip);
+router.delete("/trips/:id", deleteTrip);
 
 module.exports = router;

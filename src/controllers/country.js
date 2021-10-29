@@ -29,7 +29,7 @@ exports.getCountry = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.send({
+    res.status(500).send({
       status: "failed",
       message: "server error",
     });
@@ -41,11 +41,11 @@ exports.addCountry = async (req, res) => {
     const createData = await country.create(req.body);
     res.send({
       status: "success",
-      data: "add data succes",
+      createData,
     });
   } catch (error) {
     console.log(error);
-    res.send({
+    res.status(500).send({
       status: "failed",
       message: "server error",
     });
@@ -64,7 +64,7 @@ exports.updateCountry = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.send({
+    res.status(500).send({
       status: "failed",
       message: "server error",
     });

@@ -13,6 +13,12 @@ module.exports = {
       },
       idCountry: {
         type: Sequelize.INTEGER,
+        references: {
+          model: "countries",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       accomodation: {
         type: Sequelize.STRING,
