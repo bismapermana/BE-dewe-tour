@@ -14,6 +14,7 @@ exports.getTransactions = async (req, res) => {
               "id",
               "status",
               "profilePicture",
+              "password",
             ],
           },
         },
@@ -28,7 +29,7 @@ exports.getTransactions = async (req, res) => {
             model: country,
             as: "country",
             attributes: {
-              exclude: ["updateAt", "createdAt", "id", "password", "address"],
+              exclude: ["updatedAt", "createdAt", "id", "password", "address"],
             },
           },
         },
@@ -91,11 +92,9 @@ exports.getTransaction = async (req, res) => {
 
 exports.addTransaction = async (req, res) => {
   try {
-    const image = req.files.imageFile[0].filename;
-    const allData = { ...req.body, attachment: image };
+    const attachment = req.files.imageFile[0].filename;
+    const allData = { ...req.body, attachment };
     const data = await transaction.create(allData);
-
-    console.log(req.files);
 
     res.send({
       status: "success",

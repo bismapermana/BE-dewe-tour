@@ -9,7 +9,7 @@ module.exports = {
         password: "123456789",
         phone: "0812839203",
         address: "bandung, jawabarat",
-        role: "admin",
+        status: "admin",
         createdAt: new Date(),
         updatedAt: new Date(),
       },

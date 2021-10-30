@@ -38,6 +38,15 @@ exports.getCountry = async (req, res) => {
 
 exports.addCountry = async (req, res) => {
   try {
+    const allData = await country.findOne({
+      where: { name: req.body.name },
+    });
+    if (allData?.name === req.body.name) {
+      return res.status(400).send({
+        status: "failed",
+        message: "Country already exist",
+      });
+    }
     const createData = await country.create(req.body);
     res.send({
       status: "success",
