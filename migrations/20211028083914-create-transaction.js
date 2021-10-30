@@ -22,9 +22,19 @@ module.exports = {
       },
       idTrip: {
         type: Sequelize.INTEGER,
+        references: {
+          model: "trips",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       idUser: {
         type: Sequelize.INTEGER,
+        references: {
+          model: "users",
+          key: "id",
+        },
       },
       createdAt: {
         allowNull: false,

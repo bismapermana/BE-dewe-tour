@@ -10,10 +10,11 @@ module.exports = {
       },
       fullName: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       email: {
         type: Sequelize.STRING,
-        unique: true,
+        allowNull: false,
       },
       password: {
         type: Sequelize.STRING,
@@ -25,7 +26,10 @@ module.exports = {
       address: {
         type: Sequelize.STRING,
       },
-      role: {
+      profilePicture: {
+        type: Sequelize.STRING,
+      },
+      status: {
         allowNull: false,
         type: Sequelize.STRING,
       },

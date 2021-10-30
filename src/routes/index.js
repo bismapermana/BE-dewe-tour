@@ -8,6 +8,11 @@ const {
   updateCountry,
 } = require("../controllers/country");
 const {
+  getTransactions,
+  getTransaction,
+  addTransaction,
+} = require("../controllers/transaction");
+const {
   getTrips,
   getTrip,
   addTrip,
@@ -30,5 +35,9 @@ router.get("/trips/:id", getTrip);
 router.post("/trips", uploadFile("imageFile"), addTrip);
 router.patch("/trips/:id", uploadFile("imageFile"), updateTrip);
 router.delete("/trips/:id", deleteTrip);
+
+router.get("/transactions", getTransactions);
+router.get("/transactions/:id", getTransaction);
+router.post("/transactions", uploadFile("imageFile"), addTransaction);
 
 module.exports = router;

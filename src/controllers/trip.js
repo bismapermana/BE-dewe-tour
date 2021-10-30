@@ -65,14 +65,10 @@ exports.addTrip = async (req, res) => {
     );
     const allData = { ...req.body, image };
     const data = await trip.create(allData);
-    const findData = await trip.findOne({
-      where: { id: data.id },
-    });
-    console.log(data);
-    console.log(findData);
+
     res.send({
       status: "success",
-      data: findData,
+      data,
     });
   } catch (error) {
     console.log(error);
