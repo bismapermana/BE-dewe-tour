@@ -69,7 +69,7 @@ exports.register = async (req, res) => {
     if (findData) {
       return res.status(400).send({
         status: "error",
-        message: "Email has been registered",
+        message: "email has been registered",
         data: findData,
       });
     }

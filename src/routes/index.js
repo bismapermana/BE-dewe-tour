@@ -25,27 +25,27 @@ const {
   register,
   login,
 } = require("../controllers/user");
-const { auth } = require("../middlewares/auth");
+const { auth, admin } = require("../middlewares/auth");
 const { uploadFile } = require("../middlewares/uploadFIle");
 
-router.get("/users", getUsers);
-router.delete("/users/:id", deleteUser);
+router.get("/users", auth, getUsers);
+router.delete("/users/:id", auth, admin, deleteUser);
 router.post("/register", register);
-router.post("/login", login);
+router.post("/login", auth, login);
 
 router.get("/countries", getCountries);
 router.get("/countries/:id", getCountry);
-router.post("/countries", addCountry);
-router.patch("/countries/:id", updateCountry);
+router.post("/countries", auth, admin, addCountry);
+router.patch("/countries/:id", auth, admin, updateCountry);
 
 router.get("/trips", getTrips);
 router.get("/trips/:id", getTrip);
 router.post("/trips", auth, uploadFile("imageFile"), addTrip);
-router.patch("/trips/:id", uploadFile("imageFile"), auth, updateTrip);
-router.delete("/trips/:id", deleteTrip);
+router.patch("/trips/:id", auth, admin, uploadFile("imageFile"), updateTrip);
+router.delete("/trips/:id", auth, admin, deleteTrip);
 
-router.get("/transactions", getTransactions);
-router.get("/transactions/:id", getTransaction);
-router.post("/transactions", uploadFile("imageFile"), addTransaction);
+router.get("/transactions", auth, getTransactions);
+router.get("/transactions/:id", auth, getTransaction);
+router.post("/transactions", auth, uploadFile("imageFile"), addTransaction);
 
 module.exports = router;
