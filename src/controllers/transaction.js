@@ -90,10 +90,43 @@ exports.getTransaction = async (req, res) => {
   }
 };
 
+exports.updateTransaction = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await transaction.update(
+      {
+        status: "approved",
+      },
+      {
+        where: { id },
+      }
+    );
+
+    res.send({
+      status: "succes",
+      message: `update transaction id ${id} success`,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      status: "failed",
+      message: "server error",
+    });
+  }
+};
+
 exports.addTransaction = async (req, res) => {
   try {
+    const { id } = req.idUser;
+
     const attachment = req.files.imageFile[0].filename;
-    const allData = { ...req.body, attachment };
+    const allData = {
+      ...req.body,
+      idUser: id,
+      status: "waiting to approve",
+      attachment,
+    };
     const data = await transaction.create(allData);
 
     res.send({
@@ -104,6 +137,27 @@ exports.addTransaction = async (req, res) => {
     console.log(error);
     res.status(500).send({
       status: "error",
+      message: "server error",
+    });
+  }
+};
+
+exports.deleteTransaction = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await transaction.destroy({
+      where: { id },
+    });
+
+    res.send({
+      status: "success",
+      message: `delete trip id ${id} success`,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      status: "failed",
       message: "server error",
     });
   }

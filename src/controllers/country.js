@@ -38,10 +38,6 @@ exports.getCountry = async (req, res) => {
 
 exports.addCountry = async (req, res) => {
   try {
-    const { id } = req.idUser;
-
-    console.log("dibuat oleh", id);
-
     const allData = await country.findOne({
       where: { name: req.body.name.toLowerCase() },
     });
@@ -74,6 +70,27 @@ exports.updateCountry = async (req, res) => {
     res.send({
       status: "success",
       message: `update country id ${id} success`,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      status: "failed",
+      message: "server error",
+    });
+  }
+};
+
+exports.deleteCountry = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await country.destroy({
+      where: { id },
+    });
+
+    res.send({
+      status: "success",
+      message: `delete country id ${id} success `,
     });
   } catch (error) {
     console.log(error);

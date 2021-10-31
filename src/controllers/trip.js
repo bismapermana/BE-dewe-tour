@@ -1,4 +1,5 @@
 const { trip, country } = require("../../models");
+const joi = require("joi");
 
 exports.getTrips = async (req, res) => {
   try {
@@ -60,6 +61,32 @@ exports.getTrip = async (req, res) => {
 
 exports.addTrip = async (req, res) => {
   try {
+    const reqData = req.body;
+
+    const schema = joi
+      .object({
+        title: joi.string().required(),
+        idCountry: joi.number().required(),
+        accomodation: joi.string(),
+        transportation: joi.string(),
+        eat: joi.string(),
+        day: joi.number().required(),
+        night: joi.number().required(),
+        date: joi.string(),
+        price: joi.number().required(),
+        quota: joi.number().required(),
+        description: joi.string(),
+        image: joi.string(),
+      })
+      .validate(reqData);
+
+    if (schema.error) {
+      return res.status(400).send({
+        status: "failed",
+        message: schema.error.message,
+      });
+    }
+
     const image = JSON.stringify(
       req.files.imageFile.map((index) => index.filename)
     );

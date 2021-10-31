@@ -1,19 +1,15 @@
-// // import package here
 const multer = require("multer");
 
 exports.uploadFile = (imageFile) => {
-  // define storage destination
   const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, "uploads");
     },
     filename: function (req, file, cb) {
-      //second params is the filename
       cb(null, Date.now() + "-" + file.originalname.replace(/\s/g, ""));
     },
   });
 
-  // define function for file filtering
   const fileFilter = (req, file, cb) => {
     if (file.fieldname === imageFile) {
       if (!file.originalname.match(/\.(jpg|JPG|JPEG|png|PNG|svg)$/)) {
@@ -27,7 +23,6 @@ exports.uploadFile = (imageFile) => {
     }
   };
 
-  // maximum size for file upload
   const sizeInMB = 10;
   const maxSize = sizeInMB * 1024 * 1024;
 

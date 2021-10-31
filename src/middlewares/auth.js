@@ -36,7 +36,7 @@ exports.admin = async (req, res, next) => {
     const statusUser = await user.findOne({
       where: { id },
     });
-    // console.log(status);
+
     if (statusUser.status !== "admin") {
       return res.status(403).send({
         status: "failed",

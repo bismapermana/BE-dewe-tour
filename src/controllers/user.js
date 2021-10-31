@@ -142,9 +142,7 @@ exports.login = async (req, res) => {
       process.env.SECRET_KEY
     );
 
-    console.log(process.env.SECRET_KEY);
-
-    res.status(200).send({
+    res.send({
       status: "success",
       message: "successfully login",
       data: {
@@ -155,5 +153,68 @@ exports.login = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    res.status(500).send({
+      status: "failed",
+      message: "server error",
+    });
+  }
+};
+
+exports.updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const schema = joi
+      .object({
+        fullName: joi.string().required(),
+        email: joi
+          .string()
+          .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } }),
+        password: joi.string().min(5).required(),
+        phone: joi.string().required(),
+        address: joi.string().required(),
+      })
+      .validate(data);
+
+    if (schema.error) {
+      return res.status(400).send({
+        status: error,
+        message: schema.error.message,
+      });
+    }
+
+    await user.update(req.body, {
+      where: { id },
+    });
+
+    res.send({
+      status: "success",
+      message: `update user id ${id} success`,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      status: "failed",
+      message: "server error",
+    });
+  }
+};
+
+exports.getUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await user.findOne({
+      where: { id },
+    });
+    res.send({
+      status: "success",
+      message: `get user id ${id} success`,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      status: "failed",
+      message: "server error",
+    });
   }
 };
