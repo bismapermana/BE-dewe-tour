@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       country.hasMany(models.trip, {
-        as: "trip",
+        as: "trips",
         foreignKey: {
           name: "idCountry",
         },

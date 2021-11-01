@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       trip.belongsTo(models.country, {
-        as: "country",
+        as: "countries",
         foreignKey: {
           name: "idCountry",
         },
@@ -22,8 +22,8 @@ module.exports = (sequelize, DataTypes) => {
       idCountry: DataTypes.INTEGER,
       accomodation: DataTypes.STRING,
       transportation: DataTypes.STRING,
-      eat: DataTypes.STRING,
-      day: DataTypes.STRING,
+      eat: DataTypes.INTEGER,
+      day: DataTypes.INTEGER,
       night: DataTypes.STRING,
       dateTrip: DataTypes.DATE,
       price: DataTypes.INTEGER,

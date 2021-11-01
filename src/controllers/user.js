@@ -212,12 +212,13 @@ exports.getUser = async (req, res) => {
   try {
     const { id } = req.params;
 
-    await user.findOne({
+    const data = await user.findOne({
       where: { id },
     });
+
     res.send({
       status: "success",
-      message: `get user id ${id} success`,
+      data,
     });
   } catch (error) {
     console.log(error);

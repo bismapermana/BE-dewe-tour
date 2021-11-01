@@ -14,6 +14,7 @@ const {
   addTransaction,
   deleteTransaction,
   updateTransaction,
+  paymentTransaction,
 } = require("../controllers/transaction");
 const {
   getTrips,
@@ -54,8 +55,14 @@ router.delete("/trips/:id", auth, admin, deleteTrip);
 
 router.get("/transactions", auth, getTransactions);
 router.get("/transactions/:id", auth, getTransaction);
-router.post("/transactions", auth, uploadFile("imageFile"), addTransaction);
+router.post("/transactions", auth, addTransaction);
 router.patch("/transactions/:id", auth, admin, updateTransaction);
 router.delete("/transactions/:id", auth, admin, deleteTransaction);
+router.patch(
+  "/transactions/payment/:id",
+  auth,
+  uploadFile("imageFile"),
+  paymentTransaction
+);
 
 module.exports = router;

@@ -6,7 +6,7 @@ exports.getTrips = async (req, res) => {
     const data = await trip.findAll({
       include: {
         model: country,
-        as: "country",
+        as: "countries",
         attributes: {
           exclude: ["createdAt", "updatedAt", "id"],
         },
@@ -36,7 +36,7 @@ exports.getTrip = async (req, res) => {
       where: { id },
       include: {
         model: country,
-        as: "country",
+        as: "countries",
         attributes: {
           exclude: ["createdAt", "updatedAt", "id"],
         },
@@ -45,10 +45,15 @@ exports.getTrip = async (req, res) => {
         exclude: ["idCountry"],
       },
     });
+    const image = JSON.parse(data.image);
+    const images = image.map((index) => {
+      return "localhost:5000/uploads/" + index;
+    });
 
     res.send({
       status: "success",
       data,
+      images,
     });
   } catch (error) {
     console.log(error);

@@ -6,7 +6,7 @@ exports.getTransactions = async (req, res) => {
       include: [
         {
           model: user,
-          as: "user",
+          as: "users",
           attributes: {
             exclude: [
               "updatedAt",
@@ -20,14 +20,14 @@ exports.getTransactions = async (req, res) => {
         },
         {
           model: trip,
-          as: "trip",
+          as: "trips",
 
           attributes: {
             exclude: ["updatedAt", "createdAt", "id", "idCountry"],
           },
           include: {
             model: country,
-            as: "country",
+            as: "countries",
             attributes: {
               exclude: ["updatedAt", "createdAt", "id", "password", "address"],
             },
@@ -56,20 +56,20 @@ exports.getTransaction = async (req, res) => {
       include: [
         {
           model: user,
-          as: "user",
+          as: "users",
           attributes: {
             exclude: ["updatedAt", "createdAt", "id", "password", "address"],
           },
         },
         {
           model: trip,
-          as: "trip",
+          as: "trips",
           attributes: {
             exclude: ["updatedAt", "createdAt", "id", "idCountry"],
           },
           include: {
             model: country,
-            as: "country",
+            as: "countries",
             attributes: {
               exclude: ["updatedAt", "createdAt", "id"],
             },
@@ -119,19 +119,42 @@ exports.updateTransaction = async (req, res) => {
 exports.addTransaction = async (req, res) => {
   try {
     const { id } = req.idUser;
-
-    const attachment = req.files.imageFile[0].filename;
     const allData = {
       ...req.body,
       idUser: id,
-      status: "waiting to approve",
-      attachment,
+      status: "waiting to payment",
     };
     const data = await transaction.create(allData);
 
     res.send({
       status: "success",
       data,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      status: "error",
+      message: "server error",
+    });
+  }
+};
+
+exports.paymentTransaction = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const attachment = req.files.imageFile[0].filename;
+    await transaction.update(
+      {
+        status: "waiting to approve",
+        attachment,
+      },
+      {
+        where: { id },
+      }
+    );
+    res.send({
+      status: "success",
+      message: `update transaction id ${id} success`,
     });
   } catch (error) {
     console.log(error);
