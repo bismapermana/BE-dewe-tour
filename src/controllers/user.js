@@ -162,27 +162,36 @@ exports.login = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   try {
-    const { id } = req.params;
     const schema = joi
       .object({
-        fullName: joi.string().required(),
+        fullName: joi.string().allow().optional(),
         email: joi
           .string()
           .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } }),
-        password: joi.string().min(5).required(),
-        phone: joi.string().required(),
-        address: joi.string().required(),
+        password: joi.string().min(5).allow("").optional(),
+        phone: joi.string().allow("").optional(),
+        address: joi.string().allow("").optional(),
       })
-      .validate(data);
+      .validate(req.body);
 
     if (schema.error) {
       return res.status(400).send({
-        status: error,
+        status: "error",
         message: schema.error.message,
       });
     }
 
-    await user.update(req.body, {
+    const { password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const profilePicture = req.files.imageFile[0].filename;
+    const data = {
+      ...req.body,
+      profilePicture: profilePicture,
+      password: hashedPassword,
+    };
+
+    const { id } = req.params;
+    await user.update(data, {
       where: { id },
     });
 

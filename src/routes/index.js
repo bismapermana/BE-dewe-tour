@@ -37,7 +37,7 @@ router.get("/users", auth, admin, getUsers);
 router.get("/users/:id", auth, getUser);
 router.post("/register", register);
 router.post("/login", login);
-router.patch("/users/:id", auth, updateUser);
+router.patch("/users/:id", auth, uploadFile("imageFile"), updateUser);
 router.delete("/users/:id", auth, admin, deleteUser);
 
 router.get("/countries", getCountries);
@@ -55,13 +55,7 @@ router.delete("/trips/:id", auth, admin, deleteTrip);
 router.get("/transactions", auth, getTransactions);
 router.get("/transactions/:id", auth, getTransaction);
 router.post("/transactions", auth, uploadFile("imageFile"), addTransaction);
-router.patch(
-  "/transaction",
-  auth,
-  admin,
-  uploadFile("imageFile"),
-  updateTransaction
-);
-router.delete("/transactions/id", auth, admin, deleteTransaction);
+router.patch("/transactions/:id", auth, admin, updateTransaction);
+router.delete("/transactions/:id", auth, admin, deleteTransaction);
 
 module.exports = router;

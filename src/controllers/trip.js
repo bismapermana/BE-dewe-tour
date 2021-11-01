@@ -76,6 +76,7 @@ exports.addTrip = async (req, res) => {
         price: joi.number().required(),
         quota: joi.number().required(),
         description: joi.string(),
+        dateTrip: joi.string(),
         image: joi.string(),
       })
       .validate(reqData);
