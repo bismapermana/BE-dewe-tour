@@ -15,6 +15,7 @@ const {
   deleteTransaction,
   updateTransaction,
   paymentTransaction,
+  getTransactionbyToken,
 } = require("../controllers/transaction");
 const {
   getTrips,
@@ -34,8 +35,8 @@ const {
 const { auth, admin } = require("../middlewares/auth");
 const { uploadFile } = require("../middlewares/uploadFIle");
 
-router.get("/users", auth, admin, getUsers);
-router.get("/users/:id", auth, getUser);
+router.get("/users", auth, getUsers);
+router.get("/user", auth, getUser);
 router.post("/register", register);
 router.post("/login", login);
 router.patch("/users/:id", auth, uploadFile("imageFile"), updateUser);
@@ -54,7 +55,8 @@ router.patch("/trips/:id", auth, admin, uploadFile("imageFile"), updateTrip);
 router.delete("/trips/:id", auth, admin, deleteTrip);
 
 router.get("/transactions", auth, getTransactions);
-router.get("/transactions/:id", auth, getTransaction);
+router.get("/transaction", auth, getTransactionbyToken);
+router.get("/transaction/:id", auth, getTransaction);
 router.post("/transactions", auth, addTransaction);
 router.patch("/transactions/:id", auth, admin, updateTransaction);
 router.delete("/transactions/:id", auth, admin, deleteTransaction);

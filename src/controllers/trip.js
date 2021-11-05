@@ -16,6 +16,8 @@ exports.getTrips = async (req, res) => {
       },
     });
 
+    const image = data.map((item) => JSON.parse(item.image));
+
     res.send({
       status: "success",
       data,
@@ -45,15 +47,10 @@ exports.getTrip = async (req, res) => {
         exclude: ["idCountry"],
       },
     });
-    const image = JSON.parse(data.image);
-    const images = image.map((index) => {
-      return "localhost:5000/uploads/" + index;
-    });
 
     res.send({
       status: "success",
       data,
-      images,
     });
   } catch (error) {
     console.log(error);
@@ -96,6 +93,7 @@ exports.addTrip = async (req, res) => {
     const image = JSON.stringify(
       req.files.imageFile.map((index) => index.filename)
     );
+
     const allData = { ...req.body, image };
     const data = await trip.create(allData);
 

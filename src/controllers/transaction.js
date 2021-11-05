@@ -122,7 +122,7 @@ exports.addTransaction = async (req, res) => {
     const allData = {
       ...req.body,
       idUser: id,
-      status: "waiting to payment",
+      status: "waiting for payment",
     };
     const data = await transaction.create(allData);
 
@@ -176,6 +176,49 @@ exports.deleteTransaction = async (req, res) => {
     res.send({
       status: "success",
       message: `delete trip id ${id} success`,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      status: "failed",
+      message: "server error",
+    });
+  }
+};
+
+exports.getTransactionbyToken = async (req, res) => {
+  try {
+    const { id } = req.idUser;
+    const data = await transaction.findAll({
+      where: { idUser: id },
+      include: [
+        {
+          model: user,
+          as: "users",
+          attributes: {
+            exclude: ["updatedAt", "createdAt", "id", "password", "address"],
+          },
+        },
+        {
+          model: trip,
+          as: "trips",
+          attributes: {
+            exclude: ["updatedAt", "createdAt", "id", "idCountry"],
+          },
+          include: {
+            model: country,
+            as: "countries",
+            attributes: {
+              exclude: ["updatedAt", "createdAt", "id"],
+            },
+          },
+        },
+      ],
+    });
+
+    res.send({
+      status: "success",
+      data,
     });
   } catch (error) {
     console.log(error);

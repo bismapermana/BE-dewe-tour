@@ -210,7 +210,7 @@ exports.updateUser = async (req, res) => {
 
 exports.getUser = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.idUser;
 
     const data = await user.findOne({
       where: { id },
