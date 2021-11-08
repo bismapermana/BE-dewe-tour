@@ -16,8 +16,6 @@ exports.getTrips = async (req, res) => {
       },
     });
 
-    const image = data.map((item) => JSON.parse(item.image));
-
     res.send({
       status: "success",
       data,
@@ -34,7 +32,7 @@ exports.getTrips = async (req, res) => {
 exports.getTrip = async (req, res) => {
   try {
     const { id } = req.params;
-    const data = await trip.findOne({
+    let allData = await trip.findOne({
       where: { id },
       include: {
         model: country,
@@ -48,9 +46,28 @@ exports.getTrip = async (req, res) => {
       },
     });
 
+    const images = JSON.parse(allData.image);
+    const image = images.map((item) => {
+      return process.env.PATH_FILE + item;
+    });
+
     res.send({
       status: "success",
-      data,
+      data: {
+        title: allData.title,
+        accomodation: allData.accomodation,
+        transportation: allData.transportation,
+        eat: allData.eat,
+        day: allData.day,
+        night: allData.night,
+        dateTrip: allData.dateTrip,
+        price: allData.price,
+        quota: allData.quota,
+        description: allData.description,
+        country: allData.countries.name,
+        available: allData.available,
+        image,
+      },
     });
   } catch (error) {
     console.log(error);
@@ -94,7 +111,7 @@ exports.addTrip = async (req, res) => {
       req.files.imageFile.map((index) => index.filename)
     );
 
-    const allData = { ...req.body, image };
+    const allData = { ...req.body, available: 0, image };
     const data = await trip.create(allData);
 
     res.send({

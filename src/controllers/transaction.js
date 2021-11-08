@@ -103,6 +103,27 @@ exports.updateTransaction = async (req, res) => {
       }
     );
 
+    const findUpdateData = await transaction.findOne({
+      where: {
+        id,
+      },
+    });
+    const findData = await trip.findOne({
+      where: {
+        id: findUpdateData.idTrip,
+      },
+    });
+    await trip.update(
+      {
+        available: findUpdateData.counterQty + findData.available,
+      },
+      {
+        where: {
+          id: findUpdateData.idTrip,
+        },
+      }
+    );
+
     res.send({
       status: "succes",
       message: `update transaction id ${id} success`,
@@ -124,6 +145,7 @@ exports.addTransaction = async (req, res) => {
       idUser: id,
       status: "waiting for payment",
     };
+
     const data = await transaction.create(allData);
 
     res.send({
@@ -142,7 +164,8 @@ exports.addTransaction = async (req, res) => {
 exports.paymentTransaction = async (req, res) => {
   try {
     const { id } = req.params;
-    const attachment = req.files.imageFile[0].filename;
+    const image = req.files.imageFile[0].filename;
+    const attachment = process.env.PATH_FILE + image;
     await transaction.update(
       {
         status: "waiting to approve",
@@ -189,7 +212,7 @@ exports.deleteTransaction = async (req, res) => {
 exports.getTransactionbyToken = async (req, res) => {
   try {
     const { id } = req.idUser;
-    const data = await transaction.findAll({
+    const transactions = await transaction.findAll({
       where: { idUser: id },
       include: [
         {
@@ -218,7 +241,7 @@ exports.getTransactionbyToken = async (req, res) => {
 
     res.send({
       status: "success",
-      data,
+      data: transactions,
     });
   } catch (error) {
     console.log(error);

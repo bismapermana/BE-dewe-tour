@@ -39,7 +39,7 @@ router.get("/users", auth, getUsers);
 router.get("/user", auth, getUser);
 router.post("/register", register);
 router.post("/login", login);
-router.patch("/users/:id", auth, uploadFile("imageFile"), updateUser);
+router.patch("/user", auth, uploadFile("imageFile"), updateUser);
 router.delete("/users/:id", auth, admin, deleteUser);
 
 router.get("/countries", getCountries);
@@ -49,7 +49,7 @@ router.patch("/countries/:id", auth, admin, updateCountry);
 router.delete("/countries/:id", auth, admin, deleteCountry);
 
 router.get("/trips", getTrips);
-router.get("/trips/:id", getTrip);
+router.get("/trip/:id", getTrip);
 router.post("/trips", auth, admin, uploadFile("imageFile"), addTrip);
 router.patch("/trips/:id", auth, admin, uploadFile("imageFile"), updateTrip);
 router.delete("/trips/:id", auth, admin, deleteTrip);

@@ -162,38 +162,16 @@ exports.login = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   try {
-    const schema = joi
-      .object({
-        fullName: joi.string().allow().optional(),
-        email: joi
-          .string()
-          .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } }),
-        password: joi.string().min(5).allow("").optional(),
-        phone: joi.string().allow("").optional(),
-        address: joi.string().allow("").optional(),
-      })
-      .validate(req.body);
+    const imageProfile = req.files.imageFile[0].filename;
+    const profilePicture = process.env.PATH_File + imageProfile;
 
-    if (schema.error) {
-      return res.status(400).send({
-        status: "error",
-        message: schema.error.message,
-      });
-    }
-
-    const { password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const profilePicture = req.files.imageFile[0].filename;
-    const data = {
-      ...req.body,
-      profilePicture: profilePicture,
-      password: hashedPassword,
-    };
-
-    const { id } = req.params;
-    await user.update(data, {
-      where: { id },
-    });
+    const { id } = req.idUser;
+    await user.update(
+      { profilePicture },
+      {
+        where: { id },
+      }
+    );
 
     res.send({
       status: "success",
