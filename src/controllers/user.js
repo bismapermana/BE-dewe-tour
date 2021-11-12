@@ -65,7 +65,7 @@ exports.register = async (req, res) => {
     const findData = await user.findOne({
       where: { email: req.body.email },
     });
-    console.log(findData);
+
     if (findData) {
       return res.status(400).send({
         status: "error",
@@ -162,16 +162,47 @@ exports.login = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   try {
+    const { id } = req.idUser;
+
     const imageProfile = req.files.imageFile[0].filename;
     const profilePicture = process.env.PATH_File + imageProfile;
 
-    const { id } = req.idUser;
-    await user.update(
-      { profilePicture },
-      {
-        where: { id },
-      }
-    );
+    const data = req.body;
+    const schema = joi
+      .object({
+        fullName: joi.string().required(),
+        email: joi
+          .string()
+          .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } }),
+        phone: joi.string().required(),
+        address: joi.string().required(),
+      })
+      .validate(data);
+
+    if (schema.error) {
+      return res.status(400).send({
+        status: "failed",
+        message: schema.error.message,
+      });
+    }
+
+    const findData = await user.findOne({
+      where: { email: req.body.email },
+    });
+
+    if (findData) {
+      return res.status(400).send({
+        status: "error",
+        message: "email has been registered",
+        data: findData,
+      });
+    }
+
+    const allData = { ...data, profilePicture };
+
+    await user.update(allData, {
+      where: { id },
+    });
 
     res.send({
       status: "success",

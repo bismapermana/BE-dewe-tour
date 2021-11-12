@@ -96,33 +96,36 @@ exports.updateTransaction = async (req, res) => {
 
     await transaction.update(
       {
-        status: "approved",
+        status: req.body.status,
       },
       {
         where: { id },
       }
     );
 
-    const findUpdateData = await transaction.findOne({
-      where: {
-        id,
-      },
-    });
-    const findData = await trip.findOne({
-      where: {
-        id: findUpdateData.idTrip,
-      },
-    });
-    await trip.update(
-      {
-        available: findUpdateData.counterQty + findData.available,
-      },
-      {
+    if (req.body.status === "approved") {
+      const findUpdateData = await transaction.findOne({
+        where: {
+          id,
+        },
+      });
+      const findData = await trip.findOne({
         where: {
           id: findUpdateData.idTrip,
         },
-      }
-    );
+      });
+
+      await trip.update(
+        {
+          available: findUpdateData.counterQty + findData.available,
+        },
+        {
+          where: {
+            id: findUpdateData.idTrip,
+          },
+        }
+      );
+    }
 
     res.send({
       status: "succes",

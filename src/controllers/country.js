@@ -39,7 +39,7 @@ exports.getCountry = async (req, res) => {
 exports.addCountry = async (req, res) => {
   try {
     const allData = await country.findOne({
-      where: { name: req.body.name.toLowerCase() },
+      where: req.body,
     });
     if (allData) {
       return res.status(400).send({
