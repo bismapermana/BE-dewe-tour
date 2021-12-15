@@ -142,7 +142,7 @@ exports.login = async (req, res) => {
       process.env.SECRET_KEY
     );
 
-    res.send({
+    res.status(200).send({
       status: "success",
       message: "successfully login",
       data: {

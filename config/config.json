@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": null,
-    "database": "db_dewe_tour",
+    "database": "db-dewetour",
     "host": "localhost",
     "dialect": "mysql"
   },
